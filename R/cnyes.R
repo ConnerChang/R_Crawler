@@ -13,20 +13,24 @@ get_stock_price <- function(stock_id) {
             read_html() %>% 
             html_table(fill = TRUE) %>% 
             .[[2]]
-    
-    # type conversion 
-    dat[, 2:ncol(dat)] <- sapply(dat[, 2:ncol(dat)], 
-                                 function(x){
-                                     x <- gsub(",|%", "", x)
-                                     as.double(x)
-                                 })
-    dat$`日期` %<>% as.Date()
-    
-    return(dat)
+        
+        if (nrow(dat) != 0){
+            stop("No data has been retrieved. Please check the stock id.")
+        }
+        
+        # type conversion 
+        dat[, 2:ncol(dat)] <- sapply(dat[, 2:ncol(dat)], 
+                                     function(x){
+                                         x <- gsub(",|%", "", x)
+                                         as.double(x)
+                                     })
+        dat$`日期` %<>% as.Date()
+        
+        return(dat)
     
     }, error = function(cond) {
-        if (cond$call == ".[[2]]") {
-            message("No data has been retrieved. Please check your stock id.")
+        if (cond$call == ".[[2]]") { # e.g., stock_id == "0"
+            message("No data has been retrieved. Please check the stock id.")
         }
     }
 )
