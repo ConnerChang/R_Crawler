@@ -1,7 +1,6 @@
 library(httr)
 library(rvest)
 library(magrittr)
-library(tibble)
 
 get_starbucks_stores <- function(city) {
     city_map <- list(
@@ -36,7 +35,7 @@ get_starbucks_stores <- function(city) {
     res_g <- GET(url = url)
     
     view_state <- content(res_g) %>% 
-        html_nodes("#javax\\.faces\\.ViewState") %>% 
+        html_nodes("#javax\\.faces\\.ViewState") %>% # don't forget set escape character \\
         html_attr("value")
     
     form <- list(
@@ -71,11 +70,13 @@ get_starbucks_stores <- function(city) {
         html_nodes(xpath = "//p") %>% 
         html_text() %>% 
         matrix(ncol = 3, byrow = TRUE)
-        
-    tibble(
+    
+    dat <- data.frame(
         store = stores,
         address =  stores_des[, 1],
         tel = stores_des[, 2],
-        bussi_hour = stores_des[, 3]
-    )
+        bussi_hour = stores_des[, 3],
+        stringsAsFactors = FALSE
+    )    
+    return(dat)
 }

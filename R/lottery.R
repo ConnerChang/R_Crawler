@@ -2,6 +2,7 @@ library(httr)
 library(rvest)
 library(magrittr)
 library(tibble)
+
 # usage: get_lottery(103, 12)
 get_lottery <- function(year, month) {
     url <- "http://www.taiwanlottery.com.tw/lotto/Lotto649/history.aspx"
