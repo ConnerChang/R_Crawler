@@ -10,7 +10,6 @@ res <- GET(url,
 ## Get post titles in the index page 
 res %>% 
     content(as = "text", encoding = "UTF-8") %>% 
-    `Encoding<-`("UTF-8") %>% 
     read_html() %>% 
     html_nodes(css = ".title a") %>% 
     html_text()
